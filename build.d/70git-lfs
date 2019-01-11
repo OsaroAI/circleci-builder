@@ -1,0 +1,18 @@
+#!/bin/bash
+set -eo pipefail
+set -xv
+
+[[ $UID -eq 0 ]] || exec sudo -- "$0" "$@"
+
+gitlfs_dst="/usr/local/bin"
+gitlfs_uri="https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh"
+
+if ! which git-lfs >/dev/null 2>&1; then
+    source <(curl -sSLf "$gitlfs_uri")
+
+    apt-get update
+    apt-get install git-lfs
+fi
+
+git lfs install
+
